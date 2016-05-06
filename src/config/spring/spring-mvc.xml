@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.2.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+	<!-- 注解扫描包 -->
+	<context:component-scan base-package="com.zeng" use-default-filters="false"> 
+  <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" /> 
+  <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" /> 
+  </context:component-scan> 
+
+	<!-- 开启注解 -->
+	<mvc:annotation-driven />
+
+	<!-- 静态资源访问 -->
+	<mvc:resources mapping="/resources/**" location="/resources/**" />
+
+	<!-- 定义视图解析器 -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	<!-- 支持上传文件 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="10000000" />
+	</bean>
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+	<!-- 处理在方法级别上的@RequestMapping注解 -->
+<!-- 	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							默认是ISO-88859-1，避免乱码这里设置为UTF-8
+							<value>
+								text/html;charset=UTF-8
+							</value>
+						</list>
+					</property>
+				</bean>
+				启动JSON格式的配置
+				<bean id="jacksonMessageConverter"
+					class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+					解决 HttpMediaTypeNotAcceptableException: Could not find acceptable 
+						representation
+					<property name="supportedMediaTypes">
+						<list>
+							<value>application/json;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	 -->
+<!-- 	 spring security注解扫描支持 -->
+	<security:global-method-security
+		jsr250-annotations="enabled" secured-annotations="enabled"
+		pre-post-annotations="enabled" />
+
+
+</beans>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/security
+http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+	<security:http auto-config="true" access-denied-page="/accessDenied"
+		use-expressions="true">
+
+		<security:intercept-url pattern="/**/*.jpg"
+			filters="none" />
+		<security:intercept-url pattern="/**/*.png"
+			filters="none" />
+		<security:intercept-url pattern="/**/*.gif"
+			filters="none" />
+		<security:intercept-url pattern="/**/*.css"
+			filters="none" />
+		<security:intercept-url pattern="/**/*.js"
+			filters="none" />
+<!-- 		<security:intercept-url pattern="/user/tologin.html*"
+			filters="none" />
+		<security:intercept-url pattern="/user/register.html*"
+			filters="none" />
+		<security:intercept-url pattern="/user/checkUserName.html*"
+			filters="none" />
+		<security:intercept-url pattern="/user/loginOut_succ.html*"
+			filters="none" />
+		<security:intercept-url pattern="/user/accessDenied.html*"
+			filters="none" />
+		<security:intercept-url pattern="/user/toregister.html*"
+			filters="none" />
+		<security:intercept-url pattern="/user/main.html*"
+			access="hasAnyRole('ROLE_ADMIN','ROLE_USER','ROLE_GUEST')" /> -->
+		<security:intercept-url pattern="/**" access="permitAll()"/>
+			<!-- access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" /> -->
+
+		<security:form-login 
+			default-target-url="/dologin" authentication-failure-url="/dologin?errorMsg=error" />
+		<security:logout invalidate-session="true"
+			logout-success-url="/main" logout-url="/logout" />
+		<security:anonymous username="游客"
+			granted-authority="ROLE_GUEST" />
+
+		<!-- 会话管理配置 -->
+		<!-- session-fixation-protection="none" 防止伪造sessionid攻击. 用户登录成功后会销毁用户当前的session. 
+			创建新的session,并把用户信息复制到新session中. -->
+		<security:session-management>
+			<!-- invalid-session-url="/sessionTimeout.jsp" -->
+			<!-- 第二次登录踢出第一次登录 -->
+			<security:concurrency-control
+				max-sessions="1" />
+			<!-- 第二次无法登录 -->
+			<!-- <security:concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/> -->
+
+		</security:session-management>
+		<!-- <security:remember-me data-source-ref="dataSource" /> -->
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider >
+			<!-- <security:user-service> -->
+<!---->
+			<!-- <security:user name="admin" authorities="ROLE_ADMIN,ROLE_USER" -->
+			<!-- password="secret" /> -->
+			<!-- <security:user name="user1" authorities="ROLE_USER" -->
+			<!-- password="1111" /> -->
+			<!-- </security:user-service> -->
+
+			<!-- <security:password-encoder ref="md5Encoder" /> -->
+			<!-- <security:jdbc-user-service data-source-ref="dataSource" /> -->
+			<security:jdbc-user-service
+				data-source-ref="dataSource"
+				users-by-username-query="select USERNAME,PASSWORD,'true' as ENABLED from user_info where USERNAME=?"
+				authorities-by-username-query="select u.USERNAME,ur.ROLE as AUTHORITIES from user_info u,user_role ur where u.USERNAME=? and u.ID=ur.USERID" />
+		</security:authentication-provider>
+	</security:authentication-manager>
+<!-- <bean id="myUserDetailsService" class="com.zeng.service.MyUserDeitailsService"/> -->
+	<!-- 配置数据源 -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql://localhost/hibernate"></property>
+		<property name="username" value="zenghao"></property>
+		<property name="password" value="zhfd6112071"></property>
+	</bean>
+	<bean id="md5Encoder" class="com.utils.MD5Encoder" />
+
+	<!-- <bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased"> 
+		<property name="decisionVoters"> <list> <bean class="org.springframework.security.access.vote.RoleVoter" 
+		/> <bean class="org.springframework.security.access.vote.AuthenticatedVoter" 
+		/> <bean class="org.ourpioneer.board.security.IPAddressVoter" /> </list> 
+		</property> </bean> -->
+
+	<!-- <security:global-method-security -->
+	<!-- secured-annotations="enabled" access-decision-manager-ref="accessDecisionManager" 
+		/> -->
+</beans>

@@ -1,0 +1,1 @@
+学习SpringMVC、Spring Security、hibernate等技术写的一个博客框架，实现内容与之前的ssh_blog类似，进一步学习了ajax、ExtJs、Jquery等前端技术。完成了富客户端页面实现，本项目的亮点在于用dwr实现了一个聊天功能，能够实现多人群聊、一对一聊天等。

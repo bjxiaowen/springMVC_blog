@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://www.springframework.org/schema/aop 
+						http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+							http://www.directwebremoting.org/schema/spring-dwr 
+	http://www.directwebremoting.org/schema/spring-dwr-2.0.xsd">
+<!-- <bean id="TalkManager" name="TalkManager" class="com.zeng.manager.TalkManagerImpl"/>
+<bean name="dwrController" class="com.zeng.chat.DirectController" autowire="byName">
+	<property name="TalkManager" ref="TalkManager"></property>
+</bean> -->
+
+	<bean name="dwrController" class="com.zeng.chat.DirectController">
+		<dwr:remote javascript="dwrController">
+			<dwr:include method="onPageLoad" />
+			<dwr:include method="sendMessage" />
+		</dwr:remote>
+	</bean>
+<!-- 	<bean id="userDao" class="com.zeng.dao.User_infoDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="userManagerBase" class="com.zeng.manager.UserManagerImpl">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+
+	此处为代理
+	<bean name="userManager" parent="transactionProxy">
+		<property name="target" ref="userManagerBase"></property>
+	</bean> -->
+
+	<!-- <bean id="BuyBook" class="com.zeng.aop.BuyBookImpl" />
+	<bean id="myBeforeAdvice" class="com.zeng.aop.MyBeforeAdvice" />
+	<bean id="myAfterAdvice" class="com.zeng.aop.MyAfterAdvice"></bean>
+	<bean id="myMethodInterceptor" class="com.zeng.aop.MyMethodInterceptor" />
+	<bean id="newBuyBook" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces" value="com.zeng.aop.BuyBook" />
+		<property name="interceptorNames">
+			<list>
+				<value>myBeforeAdvice</value>
+				<value>myAfterAdvice</value>
+				<value>myMethodInterceptor</value>
+			</list>
+		</property>
+		<property name="target" ref="BuyBook" />
+	</bean> -->
+
+</beans>
